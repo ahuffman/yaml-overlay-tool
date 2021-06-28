@@ -64,6 +64,45 @@ func (cfg *Config) GetInstructions() (*Instructions, error) {
 		}
 	}
 
+	// load up included overlays
+	for _, yf := range instructions.YamlFiles {
+		for _, o := range yf.Overlays {
+			var invalidKey = []string{}
+			if o.Include != "" {
+				log.Debugf("Attempting to include overlays from '%s'", o.Include)
+				switch {
+				case len(o.Query) > 0:
+					invalidKey = append(invalidKey, "query")
+
+					fallthrough
+				case o.Value.Value != "":
+					invalidKey = append(invalidKey, "value")
+
+					fallthrough
+				case o.Action != 0:
+					invalidKey = append(invalidKey, "action")
+
+					fallthrough
+				case len(o.DocumentQuery) > 0:
+					invalidKey = append(invalidKey, "documentQuery")
+
+					fallthrough
+				case len(o.DocumentIndex) > 0:
+					invalidKey = append(invalidKey, "documentIndex")
+
+					fallthrough
+				case o.OnMissing.Action != 0:
+					invalidKey = append(invalidKey, "OnMissing")
+				}
+
+				if len(invalidKey) > 0 {
+					log.Criticalf("Attempting to include overlays, but found an invalid key of '%s'.", invalidKey)
+					os.Exit(1)
+				}
+			}
+		}
+	}
+
 	return instructions, nil
 }
 
