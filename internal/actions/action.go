@@ -89,7 +89,7 @@ func (a *Action) Type() string {
 type OnMissingAction int
 
 const (
-	// Default onMissing action. settable via viepr config, defaults to ignore.
+	// Default onMissing action. settable via viper config, defaults to ignore.
 	Default = iota
 	// Ignore onMissing action.
 	Ignore
