@@ -21,6 +21,7 @@ type Overlay struct {
 	DocumentQuery DocumentQueries `yaml:"documentQuery,omitempty"`
 	OnMissing     OnMissing       `yaml:"onMissing,omitempty"`
 	DocumentIndex []int           `yaml:"documentIndex,omitempty"`
+	Include       string          `yaml:"include,omitempty"`
 }
 
 func (o *Overlay) Apply(n *yaml.Node) error {
